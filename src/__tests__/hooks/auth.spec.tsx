@@ -9,8 +9,8 @@ const apiMock = new MockAdapter(api);
 describe('Auth hook', () => {
   it('should be able to sign in', async () => {
     const apiResponse = {
-      user: {
-        id: 'user-id',
+      provider: {
+        id: 'provider-id',
         name: 'John Doe',
         email: 'johndoe@example.com',
       },
@@ -33,25 +33,25 @@ describe('Auth hook', () => {
     await waitForNextUpdate();
 
     expect(setItemSpy).toHaveBeenCalledWith(
-      '@MandouBem:token',
+      '@MandouBemFornecedor:token',
       apiResponse.token,
     );
     expect(setItemSpy).toHaveBeenCalledWith(
-      '@MandouBem:user',
-      JSON.stringify(apiResponse.user),
+      '@MandouBemFornecedor:provider',
+      JSON.stringify(apiResponse.provider),
     );
 
-    expect(result.current.user.email).toEqual('johndoe@example.com');
+    expect(result.current.provider.email).toEqual('johndoe@example.com');
   });
 
   it('should restore saved data from storage when auth inits', () => {
     jest.spyOn(Storage.prototype, 'getItem').mockImplementation((key) => {
       switch (key) {
-        case '@MandouBem:token':
+        case '@MandouBemFornecedor:token':
           return 'token-123';
-        case '@MandouBem:user':
+        case '@MandouBemFornecedor:provider':
           return JSON.stringify({
-            id: 'user-id',
+            id: 'provider-id',
             name: 'John Doe',
             email: 'johndoe@example.com',
           });
@@ -64,17 +64,17 @@ describe('Auth hook', () => {
       wrapper: AuthProvider,
     });
 
-    expect(result.current.user.email).toEqual('johndoe@example.com');
+    expect(result.current.provider.email).toEqual('johndoe@example.com');
   });
 
   it('should be able to sign out', async () => {
     jest.spyOn(Storage.prototype, 'getItem').mockImplementation((key) => {
       switch (key) {
-        case '@MandouBem:token':
+        case '@MandouBemFornecedor:token':
           return 'token-123';
-        case '@MandouBem:user':
+        case '@MandouBemFornecedor:provider':
           return JSON.stringify({
-            id: 'user-id',
+            id: 'provider-id',
             name: 'John Doe',
             email: 'johndoe@example.com',
           });
@@ -94,18 +94,18 @@ describe('Auth hook', () => {
     });
 
     expect(removeItemSpy).toHaveBeenCalledTimes(2);
-    expect(result.current.user).toBeUndefined();
+    expect(result.current.provider).toBeUndefined();
   });
 
-  it('should be able to update user data', async () => {
+  it('should be able to update provider data', async () => {
     const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
 
     const { result } = renderHook(() => useAuth(), {
       wrapper: AuthProvider,
     });
 
-    const user = {
-      id: 'user-id',
+    const provider = {
+      id: 'provider-id',
       name: 'John Doe',
       email: 'johndoe@example.com',
       avatar: 'image-test.jpg',
@@ -113,14 +113,14 @@ describe('Auth hook', () => {
     };
 
     act(() => {
-      result.current.updateUser(user);
+      result.current.updateProvider(provider);
     });
 
     expect(setItemSpy).toHaveBeenCalledWith(
-      '@MandouBem:user',
-      JSON.stringify(user),
+      '@MandouBemFornecedor:provider',
+      JSON.stringify(provider),
     );
 
-    expect(result.current.user).toEqual(user);
+    expect(result.current.provider).toEqual(provider);
   });
 });

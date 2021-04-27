@@ -10,12 +10,14 @@ import { FiAlertCircle } from 'react-icons/fi';
 import { useField } from '@unform/core';
 
 import { Container, Error } from './styles';
+import { cnpj } from '~/utils/masks';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   containerStyle?: object;
   icon?: React.ComponentType<IconBaseProps>;
   label?: string;
+  mask?: 'cnpj';
 }
 
 const Input: React.FC<InputProps> = ({
@@ -23,6 +25,7 @@ const Input: React.FC<InputProps> = ({
   containerStyle = {},
   icon: Icon,
   label,
+  mask,
   ...rest
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,6 +44,15 @@ const Input: React.FC<InputProps> = ({
 
     setIsFilled(!!inputRef.current?.value);
   }, []);
+
+  const handleKeyUp = useCallback(
+    (e: React.FormEvent<HTMLInputElement>) => {
+      if (mask === "cnpj") {
+        cnpj(e);
+      }
+    },
+    [mask]
+  );
 
   useEffect(() => {
     registerField({
@@ -67,6 +79,7 @@ const Input: React.FC<InputProps> = ({
         <input
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
+          onKeyUp={handleKeyUp}
           defaultValue={defaultValue}
           ref={inputRef}
           {...rest}

@@ -9,17 +9,15 @@ import { useAuth } from '../hooks/auth';
 
 interface RouteProps extends ReactDOMRouterProps {
   isPrivate?: boolean;
-  isAdminOnly?: boolean;
   component: React.ComponentType;
 }
 
 const Route: React.FC<RouteProps> = ({
   isPrivate = false,
-  isAdminOnly = false,
   component: Component,
   ...rest
 }) => {
-  const { user } = useAuth();
+  const { provider } = useAuth();
 
   return (
     <ReactDOMRoute
@@ -28,17 +26,13 @@ const Route: React.FC<RouteProps> = ({
         const redirect = (
           <Redirect
             to={{
-              pathname: isPrivate ? '/' : '/feed',
+              pathname: isPrivate ? '/' : '/admin-panel',
               state: { from: location },
             }}
           />
         );
 
-        if (isAdminOnly && !user?.is_admin) {
-          return redirect;
-        }
-
-        if (isPrivate === !!user) {
+        if (isPrivate === !!provider) {
           return <Component />;
         }
 

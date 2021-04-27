@@ -30,7 +30,7 @@ const Profile: React.FC = () => {
   const { addToast } = useToast();
   const history = useHistory();
 
-  const { user, updateUser, signOut } = useAuth();
+  const { provider: user, updateProvider: updateUser, signOut } = useAuth();
 
   const handleSubmit = useCallback(
     async (data: ProfileFormData) => {
@@ -149,18 +149,6 @@ const Profile: React.FC = () => {
             }}
             onSubmit={handleSubmit}
           >
-            <AvatarInput>
-              <img
-                src={user.avatar ? user.avatar : defaultAvatar}
-                alt={user.name}
-              />
-              <label htmlFor="avatar">
-                <FiCamera />
-
-                <input type="file" id="avatar" onChange={handleAvatarChange} />
-              </label>
-            </AvatarInput>
-
             <Input name="name" icon={FiUser} placeholder="Nome" />
             <Input name="email" icon={FiMail} placeholder="E-mail" />
 

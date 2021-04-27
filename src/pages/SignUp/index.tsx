@@ -15,7 +15,7 @@ import getValidationErrors from '~/utils/getValidationErrors';
 import Input from '~/components/Input';
 import Button from '~/components/Button';
 
-import drawCelebration from '~/assets/draw-celebration.svg';
+import drawBusinessShop from '~/assets/draw-business-shop.svg';
 
 import {
   Container,
@@ -43,9 +43,10 @@ const SignUp: React.FC = () => {
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Nome obrigatório'),
-          company_name: Yup.string().required('Nome da empresa obrigatório'),
+          cnpj: Yup.string().required('CNPJ obrigatório'),
+          company_name: Yup.string().required('Nome do administrador obrigatório'),
           email: Yup.string()
-            .required('E-mail obrigatório')
+            .required('E-mail do administrador obrigatório')
             .email('Digite um e-mail válido'),
           password: Yup.string().min(6, 'No mínimo 6 dígitos'),
           password_confirmation: Yup.string()
@@ -57,7 +58,7 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
-        await api.post('/accounts', data);
+        await api.post('/provider/accounts', data);
 
         history.push('/');
 
@@ -85,6 +86,12 @@ const SignUp: React.FC = () => {
     [addToast, history],
   );
 
+  const handleCnpjChange = useCallback(
+    async (data) => {
+
+    },[],
+  );
+
   return (
     <Container>
       <Header>
@@ -95,25 +102,25 @@ const SignUp: React.FC = () => {
         </HeaderContent>
       </Header>
 
-      <img src={drawCelebration} alt="Ilustração de pessoas celebrando" />
+      <img src={drawBusinessShop} alt="Ilustração de pessoas celebrando" />
 
       <Content>
-        <span>
-          Estamos super contentes de te ver por aqui!
-          <br />
-          <br />
-          Nos conte mais sobre você e veja como é fácil cuidar dos seus
-          colaboradores.
-        </span>
         <AnimationContainer>
           <Form ref={formRef} onSubmit={handleSubmit}>
             <Input
               name="company_name"
               icon={BsBuilding}
-              label="Nome da empresa"
+              label="Razão social"
             />
-            <Input name="name" icon={FiUser} label="Nome completo" />
-            <Input name="email" icon={FiMail} label="E-mail" />
+            <Input
+              mask="cnpj"
+              name="cnpj"
+              icon={BsBuilding}
+              label="CNPJ"
+              onChange={handleCnpjChange}
+            />
+            <Input name="name" icon={FiUser} label="Nome do administrador" />
+            <Input name="email" icon={FiMail} label="E-mail do administrador" />
             <Input
               name="password"
               icon={FiLock}
@@ -132,6 +139,13 @@ const SignUp: React.FC = () => {
 
           <Link to="/">Já tem uma conta?</Link>
         </AnimationContainer>
+        <span>
+          Estamos super contentes de te ver por aqui!
+          <br />
+          <br />
+          Nos conte mais sobre você e veja como é fácil se tornar
+          nosso parceiro.
+        </span>
       </Content>
     </Container>
   );

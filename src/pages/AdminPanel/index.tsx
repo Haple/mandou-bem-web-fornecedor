@@ -22,41 +22,11 @@ const AdminPanel: React.FC = () => {
         <Content>
           <Option>
             <img
-              src={connected}
-              alt="Ilustração de três circulos conectados e com pessoas dentro"
-            />
-            <Button
-              light
-              onClick={() => history.push('/admin-panel/positions')}
-            >
-              Cargos
-            </Button>
-          </Option>
-          <Option>
-            <img
-              src={connectingTeams}
-              alt="Ilustração de um homem segurando três engrenagens"
-            />
-            <Button
-              light
-              onClick={() => history.push('/admin-panel/departments')}
-            >
-              Departamentos
-            </Button>
-          </Option>
-          <Option>
-            <img src={people} alt="Ilustração de uma mulher e um homem" />
-            <Button light onClick={() => history.push('/admin-panel/users')}>
-              Colaboradores
-            </Button>
-          </Option>
-          <Option>
-            <img
               src={gift}
               alt="Ilustração de um rapaz sentado em uma grande caixa de presentes"
             />
-            <Button light onClick={() => history.push('/admin-panel/catalog')}>
-              Catálogo
+            <Button light onClick={() => history.push('/admin-panel/gift-cards')}>
+              Vales-presente
             </Button>
           </Option>
           <Option>

@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 
 import { FiMenu } from 'react-icons/fi';
 import { Container, StyledLink, MenuButton } from './styles';
-import { useAuth } from '~/hooks/auth';
 
 const Header: React.FC = () => {
   const [toggled, setToggled] = useState(false);
-  const { user } = useAuth();
 
   return (
     <Container toggled={toggled}>
@@ -15,12 +13,8 @@ const Header: React.FC = () => {
           Mandou <b>Bem</b>
         </h2>
         <nav>
-          <StyledLink to="/feed">Feed</StyledLink>
           <StyledLink to="/profile">Meu Perfil</StyledLink>
-          <StyledLink to="/catalog">Catálogo</StyledLink>
-          {user?.is_admin && (
-            <StyledLink to="/admin-panel">Painel administrativo</StyledLink>
-          )}
+          <StyledLink to="/admin-panel">Painel administrativo</StyledLink>
         </nav>
 
         <MenuButton>

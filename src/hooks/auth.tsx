@@ -1,17 +1,15 @@
 import React, { createContext, useCallback, useState, useContext } from 'react';
 import api from '../services/api';
 
-interface User {
+interface Provider {
   id: string;
   name: string;
   email: string;
-  avatar: string;
-  is_admin: boolean;
 }
 
 interface AuthState {
   token: string;
-  user: User;
+  provider: Provider;
 }
 
 interface SignInCredentials {
@@ -20,59 +18,59 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-  user: User;
+  provider: Provider;
   token: string;
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
-  updateUser(user: User): void;
+  updateProvider(provider: Provider): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>(() => {
-    const token = localStorage.getItem('@MandouBem:token');
-    const user = localStorage.getItem('@MandouBem:user');
+    const token = localStorage.getItem('@MandouBemFornecedor:token');
+    const provider = localStorage.getItem('@MandouBemFornecedor:provider');
 
-    if (token && user) {
+    if (token && provider) {
       api.defaults.headers.authorization = `Bearer ${token}`;
 
-      return { token, user: JSON.parse(user) };
+      return { token, provider: JSON.parse(provider) };
     }
 
     return {} as AuthState;
   });
 
   const signIn = useCallback(async ({ email, password }) => {
-    const response = await api.post('sessions', {
+    const response = await api.post('provider/sessions', {
       email,
       password,
     });
 
-    const { token, user } = response.data;
+    const { token, provider } = response.data;
 
-    localStorage.setItem('@MandouBem:token', token);
-    localStorage.setItem('@MandouBem:user', JSON.stringify(user));
+    localStorage.setItem('@MandouBemFornecedor:token', token);
+    localStorage.setItem('@MandouBemFornecedor:provider', JSON.stringify(provider));
 
     api.defaults.headers.authorization = `Bearer ${token}`;
 
-    setData({ token, user });
+    setData({ token, provider: provider });
   }, []);
 
   const signOut = useCallback(() => {
-    localStorage.removeItem('@MandouBem:token');
-    localStorage.removeItem('@MandouBem:user');
+    localStorage.removeItem('@MandouBemFornecedor:token');
+    localStorage.removeItem('@MandouBemFornecedor:provider');
 
     setData({} as AuthState);
   }, []);
 
-  const updateUser = useCallback(
-    (user: User) => {
-      localStorage.setItem('@MandouBem:user', JSON.stringify(user));
+  const updateProvider = useCallback(
+    (provider: Provider) => {
+      localStorage.setItem('@MandouBemFornecedor:provider', JSON.stringify(provider));
 
       setData({
         token: data.token,
-        user,
+        provider: provider,
       });
     },
     [setData, data.token],
@@ -81,10 +79,10 @@ const AuthProvider: React.FC = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        user: data.user,
+        provider: data.provider,
         signIn,
         signOut,
-        updateUser,
+        updateProvider: updateProvider,
         token: data.token,
       }}
     >

@@ -28,13 +28,11 @@ const Routes: React.FC = () => (
       path="/admin-panel"
       component={AdminPanel}
       isPrivate
-      isAdminOnly
     />
     <Route
-      path="/admin-panel/catalog"
+      path="/admin-panel/gift-cards"
       component={AdminCatalog}
       isPrivate
-      isAdminOnly
     />
 
   </Switch>
