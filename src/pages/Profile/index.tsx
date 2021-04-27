@@ -1,11 +1,10 @@
-import React, { useCallback, useRef, ChangeEvent } from 'react';
-import { FiMail, FiUser, FiLock, FiCamera } from 'react-icons/fi';
+import React, { useCallback, useRef } from 'react';
+import { FiMail, FiUser, FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
 
-import defaultAvatar from '~/assets/default-avatar.png';
 import api from '~/services/api';
 import { useToast } from '~/hooks/toast';
 import { useAuth } from '~/hooks/auth';
@@ -15,7 +14,7 @@ import Input from '~/components/Input';
 import Button from '~/components/Button';
 import Header from '~/components/Header';
 
-import { Container, Content, AvatarInput, LogoutButton } from './styles';
+import { Container, Content, LogoutButton } from './styles';
 
 interface ProfileFormData {
   name: string;
@@ -114,26 +113,6 @@ const Profile: React.FC = () => {
       }
     },
     [addToast, history, updateUser],
-  );
-
-  const handleAvatarChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files) {
-        const data = new FormData();
-
-        data.append('avatar', e.target.files[0]);
-
-        api.patch('/profile/avatar', data).then((response) => {
-          updateUser(response.data);
-
-          addToast({
-            type: 'success',
-            title: 'Avatar atualizado',
-          });
-        });
-      }
-    },
-    [addToast, updateUser],
   );
 
   return (

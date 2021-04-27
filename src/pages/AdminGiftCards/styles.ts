@@ -19,7 +19,7 @@ export const Content = styled.div`
   }
 `;
 
-export const CatalogReward = styled.div`
+export const GiftCard = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -56,7 +56,7 @@ export const CatalogReward = styled.div`
   }
 `;
 
-export const AddCatalogReward = styled.button`
+export const AddGiftCard = styled.button`
   display: flex;
   align-items: center;
   flex-direction: column;

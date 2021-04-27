@@ -2,10 +2,7 @@ import React from 'react';
 
 import { useHistory } from 'react-router-dom';
 import Header from '~/components/Header';
-import people from '~/assets/draw-people.svg';
 import gift from '~/assets/draw-gift.svg';
-import connected from '~/assets/draw-connected.svg';
-import connectingTeams from '~/assets/draw-connecting-teams.svg';
 import acceptRequest from '~/assets/draw-accept-request.svg';
 import analytics from '~/assets/draw-data.svg';
 
@@ -25,7 +22,10 @@ const AdminPanel: React.FC = () => {
               src={gift}
               alt="Ilustração de um rapaz sentado em uma grande caixa de presentes"
             />
-            <Button light onClick={() => history.push('/admin-panel/gift-cards')}>
+            <Button
+              light
+              onClick={() => history.push('/admin-panel/gift-cards')}
+            >
               Vales-presente
             </Button>
           </Option>

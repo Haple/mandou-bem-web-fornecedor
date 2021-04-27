@@ -44,7 +44,9 @@ const SignUp: React.FC = () => {
         const schema = Yup.object().shape({
           name: Yup.string().required('Nome obrigatório'),
           cnpj: Yup.string().required('CNPJ obrigatório'),
-          company_name: Yup.string().required('Nome do administrador obrigatório'),
+          company_name: Yup.string().required(
+            'Nome do administrador obrigatório',
+          ),
           email: Yup.string()
             .required('E-mail do administrador obrigatório')
             .email('Digite um e-mail válido'),
@@ -86,11 +88,7 @@ const SignUp: React.FC = () => {
     [addToast, history],
   );
 
-  const handleCnpjChange = useCallback(
-    async (data) => {
-
-    },[],
-  );
+  const handleCnpjChange = useCallback(async (data) => {}, []);
 
   return (
     <Container>
@@ -107,11 +105,7 @@ const SignUp: React.FC = () => {
       <Content>
         <AnimationContainer>
           <Form ref={formRef} onSubmit={handleSubmit}>
-            <Input
-              name="company_name"
-              icon={BsBuilding}
-              label="Razão social"
-            />
+            <Input name="company_name" icon={BsBuilding} label="Razão social" />
             <Input
               mask="cnpj"
               name="cnpj"
@@ -143,8 +137,8 @@ const SignUp: React.FC = () => {
           Estamos super contentes de te ver por aqui!
           <br />
           <br />
-          Nos conte mais sobre você e veja como é fácil se tornar
-          nosso parceiro.
+          Nos conte mais sobre você e veja como é fácil se tornar nosso
+          parceiro.
         </span>
       </Content>
     </Container>

@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 import Header from '~/components/Header';
 
-import { Container, Content, CatalogReward, AddCatalogReward } from './styles';
+import { Container, Content, GiftCard, AddGiftCard } from './styles';
 import Button from '~/components/Button';
 import api from '~/services/api';
 import Input from '~/components/Input';
@@ -16,7 +16,7 @@ import Modal from '~/components/Modal';
 import getValidationErrors from '~/utils/getValidationErrors';
 import { useToast } from '~/hooks/toast';
 
-interface ICatalogRewardData {
+interface IGiftCardData {
   id: string;
   title: string;
   points: number;
@@ -26,7 +26,7 @@ interface ICatalogRewardData {
   description: string;
 }
 
-interface INewCatalogReward {
+interface INewGiftCard {
   title: string;
   image_url: string;
   points: number;
@@ -35,43 +35,35 @@ interface INewCatalogReward {
   description: string;
 }
 
-const AdminCatalog: React.FC = () => {
-  const [catalogRewards, setCatalogRewards] = useState<ICatalogRewardData[]>(
-    [],
+const AdminGiftCards: React.FC = () => {
+  const [giftCards, setGiftCards] = useState<IGiftCardData[]>([]);
+  const [editingGiftCard, setEditingGiftCard] = useState<IGiftCardData>(
+    {} as IGiftCardData,
   );
-  const [editingCatalogReward, setEditingCatalogReward] = useState<
-    ICatalogRewardData
-  >({} as ICatalogRewardData);
 
-  const [
-    modalStatusNewCatalogReward,
-    setModalStatusNewCatalogReward,
-  ] = useState(false);
-  const [
-    modalStatusEditCatalogReward,
-    setModalStatusEditCatalogReward,
-  ] = useState(false);
+  const [modalStatusNewGiftCard, setModalStatusNewGiftCard] = useState(false);
+  const [modalStatusEditGiftCard, setModalStatusEditGiftCard] = useState(false);
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
 
   useEffect(() => {
-    async function loadCatalogRewards(): Promise<void> {
-      const response = await api.get<ICatalogRewardData[]>('/catalog-rewards');
-      setCatalogRewards(response.data);
+    async function loadGiftCards(): Promise<void> {
+      const response = await api.get<IGiftCardData[]>('/gift-cards');
+      setGiftCards(response.data);
     }
 
-    loadCatalogRewards();
+    loadGiftCards();
   }, []);
 
   const toggleAddModal = useCallback(() => {
-    setModalStatusNewCatalogReward(!modalStatusNewCatalogReward);
-  }, [modalStatusNewCatalogReward]);
+    setModalStatusNewGiftCard(!modalStatusNewGiftCard);
+  }, [modalStatusNewGiftCard]);
 
   const toggleEditModal = useCallback(() => {
-    setModalStatusEditCatalogReward(!modalStatusEditCatalogReward);
-  }, [modalStatusEditCatalogReward]);
+    setModalStatusEditGiftCard(!modalStatusEditGiftCard);
+  }, [modalStatusEditGiftCard]);
 
-  const validateForm = useCallback(async (data: INewCatalogReward) => {
+  const validateForm = useCallback(async (data: INewGiftCard) => {
     try {
       formRef.current?.setErrors({});
 
@@ -88,7 +80,7 @@ const AdminCatalog: React.FC = () => {
           .positive('Valor inválido')
           .required('Quantidade de dias de validade obrigatória'),
         description: Yup.string().required(
-          'Política de resgate do prêmio obrigatório',
+          'Política de resgate do vale-presente obrigatório',
         ),
       });
 
@@ -104,12 +96,12 @@ const AdminCatalog: React.FC = () => {
     }
   }, []);
 
-  const handleAddCatalogReward = useCallback(
-    async (data: INewCatalogReward) => {
+  const handleAddGiftCard = useCallback(
+    async (data: INewGiftCard) => {
       try {
         await validateForm(data);
 
-        const response = await api.post<ICatalogRewardData>('catalog-rewards', {
+        const response = await api.post<IGiftCardData>('/gift-cards', {
           title: data.title,
           image_url: data.image_url,
           points: data.points,
@@ -118,38 +110,39 @@ const AdminCatalog: React.FC = () => {
           description: data.description,
         });
 
-        setCatalogRewards([...catalogRewards, response.data]);
+        setGiftCards([...giftCards, response.data]);
         toggleAddModal();
         addToast({
           type: 'success',
-          title: 'Prêmio criado com sucesso',
+          title: 'Vale-presente criado com sucesso',
         });
       } catch (err) {
         addToast({
           type: 'error',
-          title: 'Erro na criação do prêmio',
-          description: 'Ocorreu um erro ao criar o prêmio, tente novamente.',
+          title: 'Erro na criação do vale-presente',
+          description:
+            'Ocorreu um erro ao criar o vale-presente, tente novamente.',
         });
       }
     },
-    [addToast, catalogRewards, toggleAddModal, validateForm],
+    [addToast, giftCards, toggleAddModal, validateForm],
   );
 
-  const handleEditCatalogReward = useCallback(
-    async (data: ICatalogRewardData) => {
-      setEditingCatalogReward(data);
+  const handleEditGiftCard = useCallback(
+    async (data: IGiftCardData) => {
+      setEditingGiftCard(data);
       toggleEditModal();
     },
     [toggleEditModal],
   );
 
-  const editCatalogReward = useCallback(
-    async (data: ICatalogRewardData) => {
+  const editGiftCard = useCallback(
+    async (data: IGiftCardData) => {
       try {
         await validateForm(data);
 
-        const response = await api.put<ICatalogRewardData>(
-          `catalog-rewards/${editingCatalogReward.id}`,
+        const response = await api.put<IGiftCardData>(
+          `/gift-cards/${editingGiftCard.id}`,
           {
             title: data.title,
             image_url: data.image_url,
@@ -160,59 +153,55 @@ const AdminCatalog: React.FC = () => {
           },
         );
 
-        const updatedCatalogRewards = catalogRewards.map((c) =>
-          c.id === editingCatalogReward.id ? response.data : c,
+        const updatedGiftCards = giftCards.map((g) =>
+          g.id === editingGiftCard.id ? response.data : g,
         );
-        setCatalogRewards(updatedCatalogRewards);
+        setGiftCards(updatedGiftCards);
         toggleEditModal();
         addToast({
           type: 'success',
-          title: 'Prêmio editado com sucesso',
+          title: 'Vale-presente editado com sucesso',
         });
       } catch (err) {
         addToast({
           type: 'error',
-          title: 'Erro na edição do prêmio',
-          description: 'Ocorreu um erro ao editar o prêmio, tente novamente.',
+          title: 'Erro na edição do vale-presente',
+          description:
+            'Ocorreu um erro ao editar o vale-presente, tente novamente.',
         });
       }
     },
-    [
-      addToast,
-      catalogRewards,
-      editingCatalogReward.id,
-      toggleEditModal,
-      validateForm,
-    ],
+    [addToast, giftCards, editingGiftCard.id, toggleEditModal, validateForm],
   );
 
-  const handleDeleteCatalogReward = useCallback(
+  const handleDeleteGiftCard = useCallback(
     async (id: string) => {
       try {
-        await api.delete<ICatalogRewardData>(`catalog-rewards/${id}`);
-        const updatedCatalogRewards = catalogRewards.filter((c) => c.id !== id);
-        setCatalogRewards(updatedCatalogRewards);
+        await api.delete<IGiftCardData>(`/gift-cards/${id}`);
+        const updatedGiftCards = giftCards.filter((c) => c.id !== id);
+        setGiftCards(updatedGiftCards);
         addToast({
           type: 'success',
-          title: 'Prêmio excluído com sucesso',
+          title: 'Vale-presente excluído com sucesso',
         });
       } catch (err) {
         addToast({
           type: 'error',
-          title: 'Erro ao deletar prêmio',
-          description: 'Ocorreu um erro ao deletar o prêmio, tente novamente.',
+          title: 'Erro ao deletar vale-presente',
+          description:
+            'Ocorreu um erro ao deletar o vale-presente, tente novamente.',
         });
       }
     },
-    [addToast, catalogRewards],
+    [addToast, giftCards],
   );
 
   return (
     <>
       <Header />
-      <Modal isOpen={modalStatusNewCatalogReward} toggleModal={toggleAddModal}>
-        <Form ref={formRef} onSubmit={handleAddCatalogReward}>
-          <h2>Novo Prêmio</h2>
+      <Modal isOpen={modalStatusNewGiftCard} toggleModal={toggleAddModal}>
+        <Form ref={formRef} onSubmit={handleAddGiftCard}>
+          <h2>Novo Vale-Presente</h2>
           <br />
           <Input name="title" label="Título" />
           <Input name="image_url" label="Link da imagem" />
@@ -234,51 +223,51 @@ const AdminCatalog: React.FC = () => {
             label="Quantidade de dias de validade"
             defaultValue={0}
           />
-          <TextArea name="description" label="Política de resgate do prêmio" />
+          <TextArea
+            name="description"
+            label="Política de resgate do vale-presente"
+          />
 
           <Button type="submit">Salvar</Button>
         </Form>
       </Modal>
 
-      <Modal
-        isOpen={modalStatusEditCatalogReward}
-        toggleModal={toggleEditModal}
-      >
-        <Form ref={formRef} onSubmit={editCatalogReward}>
-          <h2>Editar Prêmio</h2>
+      <Modal isOpen={modalStatusEditGiftCard} toggleModal={toggleEditModal}>
+        <Form ref={formRef} onSubmit={editGiftCard}>
+          <h2>Editar Vale-presente</h2>
           <br />
           <Input
             name="title"
             label="Título"
-            defaultValue={editingCatalogReward.title}
+            defaultValue={editingGiftCard.title}
           />
           <Input
             name="image_url"
             label="Link da imagem"
-            defaultValue={editingCatalogReward.image_url}
+            defaultValue={editingGiftCard.image_url}
           />
           <Input
             type="number"
             name="points"
             label="Quantidade de pontos"
-            defaultValue={editingCatalogReward.points}
+            defaultValue={editingGiftCard.points}
           />
           <Input
             type="number"
             name="units_available"
             label="Unidades disponíveis"
-            defaultValue={editingCatalogReward.units_available}
+            defaultValue={editingGiftCard.units_available}
           />
           <Input
             type="number"
             name="expiration_days"
             label="Quantidade de dias de validade"
-            defaultValue={editingCatalogReward.expiration_days}
+            defaultValue={editingGiftCard.expiration_days}
           />
           <TextArea
             name="description"
-            label="Política de resgate do prêmio"
-            defaultValue={editingCatalogReward.description}
+            label="Política de resgate do vale-presente"
+            defaultValue={editingGiftCard.description}
           />
 
           <Button type="submit">Salvar</Button>
@@ -286,35 +275,32 @@ const AdminCatalog: React.FC = () => {
       </Modal>
 
       <Container>
-        <h2>Deixe o catálogo com a cara da sua empresa</h2>
+        <h2>Vale-presente</h2>
         <Content>
-          <AddCatalogReward onClick={toggleAddModal}>
+          <AddGiftCard onClick={toggleAddModal}>
             <FiPlus />
-            <span>Novo prêmio</span>
-          </AddCatalogReward>
+            <span>Novo vale-presente</span>
+          </AddGiftCard>
 
-          {catalogRewards &&
-            catalogRewards.map((catalogReward) => (
-              <CatalogReward key={catalogReward.id}>
-                <span>{catalogReward.title}</span>
-                <img src={catalogReward.image_url} alt="Imagem do prêmio" />
+          {giftCards &&
+            giftCards.map((giftCard) => (
+              <GiftCard key={giftCard.id}>
+                <span>{giftCard.title}</span>
+                <img src={giftCard.image_url} alt="Imagem do vale-presente" />
                 <div>
-                  <Button
-                    light
-                    onClick={() => handleEditCatalogReward(catalogReward)}
-                  >
+                  <Button light onClick={() => handleEditGiftCard(giftCard)}>
                     <FiEdit />
                     Editar
                   </Button>
                   <Button
                     light
-                    onClick={() => handleDeleteCatalogReward(catalogReward.id)}
+                    onClick={() => handleDeleteGiftCard(giftCard.id)}
                   >
                     <FiTrash />
                     Excluir
                   </Button>
                 </div>
-              </CatalogReward>
+              </GiftCard>
             ))}
         </Content>
       </Container>
@@ -322,4 +308,4 @@ const AdminCatalog: React.FC = () => {
   );
 };
 
-export default AdminCatalog;
+export default AdminGiftCards;

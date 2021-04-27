@@ -12,7 +12,7 @@ import ResetPassword from '../pages/ResetPassword';
 import Profile from '../pages/Profile';
 
 import AdminPanel from '../pages/AdminPanel';
-import AdminCatalog from '../pages/AdminCatalog';
+import AdminGiftCards from '../pages/AdminGiftCards';
 
 
 const Routes: React.FC = () => (
@@ -31,7 +31,7 @@ const Routes: React.FC = () => (
     />
     <Route
       path="/admin-panel/gift-cards"
-      component={AdminCatalog}
+      component={AdminGiftCards}
       isPrivate
     />
 
