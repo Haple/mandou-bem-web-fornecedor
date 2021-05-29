@@ -69,7 +69,7 @@ const SignIn: React.FC = () => {
       <Content>
         <AnimationContainer>
           <h1>
-            Mandou <b>Bem</b>
+            Mandou <b>Bem</b> - Parceiros
           </h1>
           <Form ref={formRef} onSubmit={handleSubmit}>
             <Input name="email" icon={FiMail} label="E-mail" />

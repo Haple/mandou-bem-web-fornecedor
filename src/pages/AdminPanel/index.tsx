@@ -29,25 +29,27 @@ const AdminPanel: React.FC = () => {
               Vales-presente
             </Button>
           </Option>
-          <Option>
+          {/* <Option>
             <img
               src={acceptRequest}
               alt="Ilustração de uma mulher analisando solicitações"
             />
             <Button
+              disabled
               light
               onClick={() => history.push('/admin-panel/reward-requests')}
             >
               Prêmios resgatados
             </Button>
-          </Option>
+          </Option> */}
           <Option>
             <img src={analytics} alt="???" />
             <Button
               light
+              disabled
               onClick={() => history.push('/admin-panel/analytics')}
             >
-              Análise e Inteligência
+              Relatório de resgates (em breve)
             </Button>
           </Option>
         </Content>
