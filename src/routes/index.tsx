@@ -13,7 +13,7 @@ import Profile from '../pages/Profile';
 
 import AdminPanel from '../pages/AdminPanel';
 import AdminGiftCards from '../pages/AdminGiftCards';
-
+import AdminValidateGiftCard from '../pages/AdminValidateGiftCard';
 
 const Routes: React.FC = () => (
   <Switch>
@@ -23,18 +23,17 @@ const Routes: React.FC = () => (
     <Route path="/reset-password" component={ResetPassword} />
 
     <Route path="/profile" component={Profile} isPrivate />
-    <Route
-      exact
-      path="/admin-panel"
-      component={AdminPanel}
-      isPrivate
-    />
+    <Route exact path="/admin-panel" component={AdminPanel} isPrivate />
     <Route
       path="/admin-panel/gift-cards"
       component={AdminGiftCards}
       isPrivate
     />
-
+    <Route
+      path="/admin-panel/validate-gift-card"
+      component={AdminValidateGiftCard}
+      isPrivate
+    />
   </Switch>
 );
 

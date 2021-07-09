@@ -3,7 +3,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Header from '~/components/Header';
 import gift from '~/assets/draw-gift.svg';
-import acceptRequest from '~/assets/draw-accept-request.svg';
+import giftCard from '~/assets/draw-gift-card.svg';
 import analytics from '~/assets/draw-data.svg';
 
 import { Container, Content, Option } from './styles';
@@ -27,6 +27,18 @@ const AdminPanel: React.FC = () => {
               onClick={() => history.push('/admin-panel/gift-cards')}
             >
               Vales-presente
+            </Button>
+          </Option>
+          <Option>
+            <img
+              src={giftCard}
+              alt="Ilustração de uma mulher com um grande vale-presente"
+            />
+            <Button
+              light
+              onClick={() => history.push('/admin-panel/validate-gift-card')}
+            >
+              Validar vale-presente
             </Button>
           </Option>
           {/* <Option>
