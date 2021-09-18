@@ -26,7 +26,7 @@ const Route: React.FC<RouteProps> = ({
         const redirect = (
           <Redirect
             to={{
-              pathname: isPrivate ? '/' : '/admin-panel',
+              pathname: isPrivate ? '/' : '/gift-card-summary',
               state: { from: location },
             }}
           />

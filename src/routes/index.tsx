@@ -14,6 +14,8 @@ import Profile from '../pages/Profile';
 import AdminPanel from '../pages/AdminPanel';
 import AdminGiftCards from '../pages/AdminGiftCards';
 import AdminValidateGiftCard from '../pages/AdminValidateGiftCard';
+import GiftCardRequestsReport from '../pages/GiftCardRequestsReport';
+import GiftCardsSummary from '~/pages/GiftCardsSummary';
 
 const Routes: React.FC = () => (
   <Switch>
@@ -34,6 +36,12 @@ const Routes: React.FC = () => (
       component={AdminValidateGiftCard}
       isPrivate
     />
+    <Route
+      path="/admin-panel/gift-card-report"
+      component={GiftCardRequestsReport}
+      isPrivate
+    />
+    <Route path="/gift-card-summary" component={GiftCardsSummary} isPrivate />
   </Switch>
 );
 
