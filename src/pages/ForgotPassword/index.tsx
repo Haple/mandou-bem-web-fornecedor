@@ -10,6 +10,7 @@ import getValidationErrors from '~/utils/getValidationErrors';
 
 import Input from '~/components/Input';
 import Button from '~/components/Button';
+import Loading from '~/components/Loading';
 
 import {
   Container,
@@ -49,7 +50,7 @@ const ForgotPassword: React.FC = () => {
           abortEarly: false,
         });
 
-        await api.post('/password/forgot', {
+        await api.post('/provider/password/forgot', {
           email: data.email,
         });
 
@@ -83,6 +84,7 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <Container>
+      <Loading loading={loading} />
       <Header>
         <HeaderContent>
           <h2>

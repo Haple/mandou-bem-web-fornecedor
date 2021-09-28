@@ -3,6 +3,8 @@ import api from '../services/api';
 
 interface Provider {
   id: string;
+  company_name: string;
+  cnpj: string;
   name: string;
   email: string;
 }
@@ -50,7 +52,10 @@ const AuthProvider: React.FC = ({ children }) => {
     const { token, provider } = response.data;
 
     localStorage.setItem('@MandouBemFornecedor:token', token);
-    localStorage.setItem('@MandouBemFornecedor:provider', JSON.stringify(provider));
+    localStorage.setItem(
+      '@MandouBemFornecedor:provider',
+      JSON.stringify(provider),
+    );
 
     api.defaults.headers.authorization = `Bearer ${token}`;
 
@@ -66,7 +71,10 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const updateProvider = useCallback(
     (provider: Provider) => {
-      localStorage.setItem('@MandouBemFornecedor:provider', JSON.stringify(provider));
+      localStorage.setItem(
+        '@MandouBemFornecedor:provider',
+        JSON.stringify(provider),
+      );
 
       setData({
         token: data.token,

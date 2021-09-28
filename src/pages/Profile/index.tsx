@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { FiMail, FiUser, FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -13,10 +13,13 @@ import getValidationErrors from '~/utils/getValidationErrors';
 import Input from '~/components/Input';
 import Button from '~/components/Button';
 import Header from '~/components/Header';
+import Loading from '~/components/Loading';
 
 import { Container, Content, LogoutButton } from './styles';
 
 interface ProfileFormData {
+  company_name: string;
+  cnpj: string;
   name: string;
   email: string;
   old_password: string;
@@ -25,6 +28,7 @@ interface ProfileFormData {
 }
 
 const Profile: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
   const history = useHistory();
@@ -33,11 +37,14 @@ const Profile: React.FC = () => {
 
   const handleSubmit = useCallback(
     async (data: ProfileFormData) => {
+      setLoading(true);
       try {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Nome Obrigatório'),
+          company_name: Yup.string().required('Razão social obrigatória'),
+          cnpj: Yup.string().required('CNPJ obrigatório'),
+          name: Yup.string().required('Nome obrigatório'),
           email: Yup.string()
             .required('E-mail obrigatório')
             .email('Digite um e-mail válido'),
@@ -65,6 +72,8 @@ const Profile: React.FC = () => {
         });
 
         const {
+          company_name,
+          cnpj,
           name,
           email,
           old_password,
@@ -73,6 +82,8 @@ const Profile: React.FC = () => {
         } = data;
 
         const formData = {
+          company_name,
+          cnpj,
           name,
           email,
           ...(old_password
@@ -84,11 +95,11 @@ const Profile: React.FC = () => {
             : {}),
         };
 
-        const response = await api.put('/profile', formData);
+        const response = await api.put('/provider/profile', formData);
 
         updateUser(response.data);
 
-        history.push('/feed');
+        history.push('/');
 
         addToast({
           type: 'success',
@@ -111,46 +122,52 @@ const Profile: React.FC = () => {
           description: 'Ocorreu um erro ao atualização perfil, tente novamente',
         });
       }
+      setLoading(false);
     },
     [addToast, history, updateUser],
   );
 
   return (
     <>
+      <Loading loading={loading} />
       <Header />
       <Container>
         <Content>
           <Form
             ref={formRef}
             initialData={{
+              company_name: user.company_name,
+              cnpj: user.cnpj,
               name: user.name,
               email: user.email,
             }}
             onSubmit={handleSubmit}
           >
-            <Input name="name" icon={FiUser} placeholder="Nome" />
-            <Input name="email" icon={FiMail} placeholder="E-mail" />
+            <Input name="company_name" icon={FiUser} label="Razão Social" />
+            <Input name="cnpj" icon={FiUser} label="CNPJ" />
+            <Input name="name" icon={FiUser} label="Nome" />
+            <Input name="email" icon={FiMail} label="E-mail" />
 
             <Input
               containerStyle={{ marginTop: 24 }}
               name="old_password"
               icon={FiLock}
               type="password"
-              placeholder="Senha atual"
+              label="Senha atual"
             />
 
             <Input
               name="password"
               icon={FiLock}
               type="password"
-              placeholder="Nova senha"
+              label="Nova senha"
             />
 
             <Input
               name="password_confirmation"
               icon={FiLock}
               type="password"
-              placeholder="Confirmar senha"
+              label="Confirmar senha"
             />
 
             <Button type="submit">Confirmar Mudanças</Button>
