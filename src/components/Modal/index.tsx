@@ -31,10 +31,10 @@ const Modal: React.FC<IModalProps> = ({ children, isOpen, toggleModal }) => {
           transform: 'translate(-50%, -50%)',
           background: '#F7F9FA',
           color: '#000000',
-          minWidth: '400px',
-          width: '500px',
+          width: '100%',
+          maxWidth: '500px',
           textAlign: 'center',
-          padding: '40px 80px',
+          padding: '20px',
         },
         overlay: {
           backgroundColor: '#121214e6',

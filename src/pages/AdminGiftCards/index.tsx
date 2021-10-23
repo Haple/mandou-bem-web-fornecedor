@@ -228,6 +228,9 @@ const AdminGiftCards: React.FC = () => {
             label="Política de resgate do vale-presente"
           />
 
+          <Button light onClick={() => toggleAddModal()}>
+            Cancelar
+          </Button>
           <Button type="submit">Salvar</Button>
         </Form>
       </Modal>
@@ -270,12 +273,15 @@ const AdminGiftCards: React.FC = () => {
             defaultValue={editingGiftCard.description}
           />
 
+          <Button light onClick={() => toggleEditModal()}>
+            Cancelar
+          </Button>
           <Button type="submit">Salvar</Button>
         </Form>
       </Modal>
 
       <Container>
-        <h2>Vale-presente</h2>
+        <h3>Vale-presente</h3>
         <Content>
           <AddGiftCard onClick={toggleAddModal}>
             <FiPlus />

@@ -97,7 +97,7 @@ const ForgotPassword: React.FC = () => {
         <AnimationContainer>
           <h2>Recuperar senha</h2>
           <Form ref={formRef} onSubmit={handleSubmit}>
-            <Input name="email" icon={FiMail} placeholder="E-mail" />
+            <Input name="email" icon={FiMail} label="E-mail" />
 
             <Button loading={loading} type="submit">
               Recuperar

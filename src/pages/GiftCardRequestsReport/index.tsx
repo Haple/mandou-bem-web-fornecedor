@@ -20,6 +20,7 @@ import Button from '~/components/Button';
 import api from '~/services/api';
 import Loading from '~/components/Loading';
 import { useToast } from '~/hooks/toast';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 interface IPagination<T> {
   total: number;
@@ -157,22 +158,11 @@ const GiftCardRequestsReport: React.FC = () => {
     }
   }, [addToast]);
 
-  const handleScroll = useCallback(async () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop !==
-      document.documentElement.offsetHeight
-    )
-      return;
-
+  const handleNextPage = useCallback(async () => {
     const answers = await getRewardRequests(page + 1);
     setRewardRequests([...rewardRequests, ...answers]);
     setPage(page + 1);
   }, [rewardRequests, getRewardRequests, page]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
 
   return (
     <>
@@ -180,7 +170,7 @@ const GiftCardRequestsReport: React.FC = () => {
       <Header />
 
       <Container>
-        <h2>Relatório de Resgates de Vales-Presente</h2>
+        <h3>Relatório de Resgates de Vales-Presente</h3>
         <br />
         <Content>
           <SearchOptions>
@@ -231,27 +221,36 @@ const GiftCardRequestsReport: React.FC = () => {
           </SearchOptions>
           <br />
           <RewardRequestsContainer>
-            <table>
-              <thead>
-                <th>Código</th>
-                <th>Data</th>
-                <th>Nome</th>
-                <th>Vale-presente</th>
-                <th>Status</th>
-              </thead>
-              <tbody>
-                {rewardRequests &&
-                  rewardRequests.map((rewardRequest) => (
-                    <tr key={rewardRequest.id}>
-                      <td>{rewardRequest.id}</td>
-                      <td>{rewardRequest.created_at}</td>
-                      <td>{rewardRequest.user_name}</td>
-                      <td>{rewardRequest.reward_title}</td>
-                      <td>{rewardRequest.status_formatted}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+            <InfiniteScroll
+              dataLength={rewardRequests.length}
+              next={handleNextPage}
+              hasMore
+              loader={<></>}
+            >
+              <table>
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Data</th>
+                    <th>Nome</th>
+                    <th>Vale-presente</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rewardRequests &&
+                    rewardRequests.map((rewardRequest) => (
+                      <tr key={rewardRequest.id}>
+                        <td>{rewardRequest.id}</td>
+                        <td>{rewardRequest.created_at}</td>
+                        <td>{rewardRequest.user_name}</td>
+                        <td>{rewardRequest.reward_title}</td>
+                        <td>{rewardRequest.status_formatted}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </InfiniteScroll>
           </RewardRequestsContainer>
         </Content>
       </Container>

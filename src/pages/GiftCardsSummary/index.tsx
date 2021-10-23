@@ -8,15 +8,14 @@ import { parseISO, format } from 'date-fns';
 import {
   Bar,
   BarChart,
-  CartesianGrid,
   Legend,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
-  Text,
   LineChart,
   Line,
+  ResponsiveContainer,
+  LabelList,
 } from 'recharts';
 
 interface ISummaryData {
@@ -73,67 +72,70 @@ const GiftCardsSummary: React.FC = () => {
         <h2>Monitor de Vales-Presente</h2>
         <Content>
           <ChartContainer>
-            <h3>Vales-presente resgatados nos últimos 30 dias</h3>
-
-            <BarChart
-              data={summary.lastRequests}
-              width={1020}
-              height={400}
-              margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
-            >
-              <XAxis dataKey="title" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar
-                name="Quantidade de vales-presente"
-                dataKey="count"
-                fill="#b987e1"
-              />
-            </BarChart>
+            <ResponsiveContainer width={'99%'} height={300}>
+              <BarChart
+                data={summary.lastRequests}
+                margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+              >
+                <h3>Vales-presente resgatados nos últimos 30 dias</h3>
+                {/* <XAxis dataKey="title" /> */}
+                <YAxis width={20} />
+                <Tooltip />
+                <Bar
+                  name="Quantidade de vales-presente"
+                  allowReorder="yes"
+                  dataKey="count"
+                  fill="#b987e1"
+                >
+                  <LabelList dataKey="title" position="top" />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
           </ChartContainer>
           <br />
+
           <ChartContainer>
             <h3>Resgates semanais</h3>
-            <LineChart
-              data={summary.weeklyRequests}
-              width={1020}
-              height={400}
-              margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
-            >
-              <XAxis dataKey="week_date_formatted" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line
-                name="Quantidade na semana"
-                type="monotone"
-                dataKey="count"
-                stroke="#b987e1"
-              />
-            </LineChart>
+            <ResponsiveContainer width={'99%'} height={300}>
+              <LineChart
+                data={summary.weeklyRequests}
+                margin={{ top: 10, left: 10, right: 10, bottom: 10 }}
+              >
+                <XAxis dataKey="week_date_formatted" />
+                <YAxis width={20} />
+                <Tooltip />
+                <Legend />
+                <Line
+                  name="Quantidade na semana"
+                  type="monotone"
+                  dataKey="count"
+                  stroke="#b987e1"
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </ChartContainer>
+
           <br />
 
           <ChartContainer>
             <h3>Validações semanais</h3>
-            <LineChart
-              data={summary.weeklyValidations}
-              width={1020}
-              height={400}
-              margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
-            >
-              <XAxis dataKey="week_date_formatted" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line
-                name="Quantidade na semana"
-                type="monotone"
-                dataKey="count"
-                stroke="#b987e1"
-              />
-            </LineChart>
+            <ResponsiveContainer width={'99%'} height={300}>
+              <LineChart
+                data={summary.weeklyValidations}
+                margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+              >
+                <XAxis dataKey="week_date_formatted" />
+                <YAxis width={20} />
+                <Tooltip />
+                <Legend />
+                <Line
+                  name="Quantidade na semana"
+                  type="monotone"
+                  dataKey="count"
+                  stroke="#b987e1"
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </ChartContainer>
         </Content>
       </Container>

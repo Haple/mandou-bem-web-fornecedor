@@ -100,9 +100,17 @@ const SignUp: React.FC = () => {
         </HeaderContent>
       </Header>
 
-      <img src={drawBusinessShop} alt="Ilustração de pessoas celebrando" />
-
       <Content>
+        <div className="welcome">
+          <img src={drawBusinessShop} alt="Ilustração de pessoas celebrando" />
+          <span>
+            Estamos super contentes de te ver por aqui!
+            <br />
+            <br />
+            Nos conte mais sobre você e veja como é fácil se tornar nosso
+            parceiro.
+          </span>
+        </div>
         <AnimationContainer>
           <Form ref={formRef} onSubmit={handleSubmit}>
             <Input name="company_name" icon={BsBuilding} label="Razão social" />
@@ -133,13 +141,6 @@ const SignUp: React.FC = () => {
 
           <Link to="/">Já tem uma conta?</Link>
         </AnimationContainer>
-        <span>
-          Estamos super contentes de te ver por aqui!
-          <br />
-          <br />
-          Nos conte mais sobre você e veja como é fácil se tornar nosso
-          parceiro.
-        </span>
       </Content>
     </Container>
   );

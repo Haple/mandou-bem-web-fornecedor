@@ -6,6 +6,7 @@ import { format, parseISO } from 'date-fns';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import Header from '~/components/Header';
+import Loading from '~/components/Loading';
 
 import {
   Container,
@@ -46,6 +47,7 @@ interface IGetGiftCardFormData {
 }
 
 const AdminValidateGiftCard: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const [
     modalStatusValidateGiftCard,
     setModalStatusValidateGiftCard,
@@ -77,6 +79,7 @@ const AdminValidateGiftCard: React.FC = () => {
 
   const handleGetGiftCardRequest = useCallback(
     async (id: string) => {
+      setLoading(true);
       try {
         const { data } = await api.get<IGiftCardRequest>(
           `/gift-card-requests/${id}`,
@@ -108,11 +111,13 @@ const AdminValidateGiftCard: React.FC = () => {
             'Ocorreu um erro ao buscar o vale-presente, tente novamente.',
         });
       }
+      setLoading(false);
     },
     [addToast],
   );
 
   const handleValidateReward = useCallback(async () => {
+    setLoading(true);
     try {
       await api.patch<IGiftCardRequest>(
         `/gift-card-requests/${giftCardRequest?.id}/validate`,
@@ -131,6 +136,7 @@ const AdminValidateGiftCard: React.FC = () => {
           'Ocorreu um erro ao validar o vale-presente, tente novamente.',
       });
     }
+    setLoading(false);
   }, [addToast, giftCardRequest, toggleValidateGiftCardModal]);
 
   const handleScan = useCallback(
@@ -165,6 +171,7 @@ const AdminValidateGiftCard: React.FC = () => {
 
   return (
     <>
+      <Loading loading={loading} />
       <Header />
 
       <Modal
@@ -236,7 +243,7 @@ const AdminValidateGiftCard: React.FC = () => {
       </Modal>
 
       <Container>
-        <h2>Validar utilização de vale-presente</h2>
+        <h3>Validar utilização de vale-presente</h3>
 
         <GiftCardRequest>
           <div>

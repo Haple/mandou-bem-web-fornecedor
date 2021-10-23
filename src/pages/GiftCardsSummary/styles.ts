@@ -22,6 +22,9 @@ export const Content = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
+
+  width: 100%;
+  max-width: 1020px;
 `;
 
 export const ChartContainer = styled.div`
@@ -33,6 +36,6 @@ export const ChartContainer = styled.div`
   background: #fff;
   border: 2px solid #c5ced6;
 
-  margin: 20px;
-  padding: 30px;
+  width: 100%;
+  max-width: 1020px;
 `;

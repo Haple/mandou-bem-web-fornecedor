@@ -18,14 +18,11 @@ export const Option = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-
   background: #fff;
   border: 2px solid #c5ced6;
-
   max-width: 300px;
-  margin: 20px;
+  margin: 0.5em;
   padding: 30px;
-
   img {
     max-height: 130px;
   }
